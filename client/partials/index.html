@@ -1,0 +1,49 @@
+<div class="container">
+    <div ng-controller='loginController'>
+        <div id="header_1">
+            <p>Welcome, {{user_name}} <p>
+        </div>
+        <div id="header_2">
+            <a href="" ng-click="logout()">Logout</a><p>
+        </div>
+        <hr>
+    </div>
+
+    <h1>Doctor Appointments</h1>
+
+</div>
+
+<div ng-controller='appointmentController'>
+
+        <input type="text" ng-model = 'appointmentFilter'>   <br>
+        <table>
+          <thead>
+              <tr>
+                 <td>Date</td>
+                 <td>Time</td>
+                 <td>Patient Name</td>
+                 <td>Complain</td>
+              <tr>
+          </thead>
+
+          <tr ng-repeat = "appointment in appointments | orderBy:appointment.appointment_date | filter:appointmentFilter">
+              <td>{{appointment.appointment_date | date : 'M/d/yyyy'}}</td>
+              <td>{{appointment.appointment_date | date:'h:mm a'}}</td>
+              <td>{{appointment._user.first_name}} {{appointment._user.last_name}}</td>
+              <td>
+                  {{appointment.complaint}}
+                  <div class = "appointment_remove" ng-if="appointment._user._id == user_id">
+                    <a href="" ng-click="remove(appointment)">Cancel</a>
+                 </div>
+              </td>
+          </tr>
+        </table>
+
+        <a ng-href = '#/new_appointment'>
+        <button>
+          Add New Appointment
+        </button>
+
+    </a>
+
+</div>

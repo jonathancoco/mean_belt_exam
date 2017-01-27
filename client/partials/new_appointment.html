@@ -1,0 +1,27 @@
+
+<h1>New Appointment</h1>
+
+<form name="appointment_form" ng-submit="create()">
+
+    <label>Date:</label><input type=date  ng-model="newAppointment.date"  ng-required = "true"  name="appointment_date"><br>
+    <div class = "red" ng-if="newAppointment.client_date_validation ">{{newAppointment.client_date_validation }}</div>
+    <br>
+
+    <label>Time:</label><input type=time min=8:00 max=17:00 step=900 ng-model="newAppointment.time" ng-required = "true" name="appointment_time" >
+    <div class = "red" ng-if="newAppointment.client_time_validation">{{newAppointment.client_time_validation}}</div>
+    <br>
+    <label>Complaint:</label>
+    <textarea ng-model="newAppointment.complaint"  name="complaint" ng-required="true" ng-minlength="10" rows="10" cols="50"></textarea>
+    <p ng-show="appointment_form.complaint.$error.minlength && !appointment_form.complaint.$pristine" class="ng_validation_method">Complaint is too short.</p>
+    <br>
+
+
+    <input type="submit"  ng-disabled="appointment_form.$invalid" value="Add Appointment"/>
+</form>
+
+<div class = "red" ng-if="newAppointment.errors.number_appointments">{{newAppointment.errors.number_appointments.message}}</div>
+
+<a ng-href = '#/'>
+<button>
+  Cancel
+</button>
