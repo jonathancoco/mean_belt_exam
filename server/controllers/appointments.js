@@ -36,27 +36,10 @@ module.exports = {
             else {
               if (appointments.length < 3)
               {
-                console.log("length of appointment is " + appointments.length);
-                console.log('We are  in create for appointments');
-                console.log("******");
-                console.log(req.body);
-                console.log("*******");
-
-                var appointment = new Appointment({_user: req.body.user, complaint: req.body.complaint, appointment_date: req.body.appointment_date });
-
-                appointment.save(function(err, appt) {
-                  if (err) {
-                    // An Example of error handling
-
-
-                    res.status(500).json(err.errors);
-
-                  } else { // else console.log that we did well and then redirect to the root route
-
                     var bHasAppointment = false;
 
                     Appointment.find( {"_user":req.body.user, "appointment_date": {"$gte": new Date(queryDate.getFullYear(), queryDate.getMonth(), queryDate.getDate()), "$lt": new Date(queryDate.getFullYear(), queryDate.getMonth(), queryDate.getDate()+1)}})
-                      .exec  (function(error1, appointments1){
+                      .exec  (function(error1, appointments1) {
 
                             if (error1)
                             {
@@ -67,24 +50,26 @@ module.exports = {
 
                                 if (appointments1.length > 0)
                                 {
-                                  bHasAppointment = true;
+                                  res.status(500).json({number_appointments:{message:'Patient is already scheduled  on this day!'}});
                                 }
+                                else {
+
+                                  var appointment = new Appointment({_user: req.body.user, complaint: req.body.complaint, appointment_date: req.body.appointment_date });
+
+                                  appointment.save(function(err, appt) {
+                                    if (err) {
+
+                                      res.status(500).json(err.errors);
+                                    }
+                                    else {
+                                      res.send(appt);
+                                    }
+
+                                  })
 
                             }
-
-                      })
-
-                      if (bHasAppointment)
-                      {
-                          res.send(appt);
-                      }
-                      else {
-                        res.status(500).json({number_appointments:{message:'Patient is already scheduled  on this day!'}});
-                      }
-
-
-                  }
-                })
+                          }
+                        })
 
               }
               else {
